@@ -1,13 +1,13 @@
 <?php
 
-namespace App; // Déclaration de l'espace de nom.
+namespace App;
 
-enum Level: string // Définition d'une énumération.
+enum Level: string
 {
-    case Admin = 'admin'; // Valeurs de l'énumération.
+    case Admin = 'admin';
     case SuperAdmin = 'superadmin';
 
-    public function label(): string // Méthode de l'énumération.
+    public function label(): string
     {
         return match($this) {
             self::Admin => 'Admin',
