@@ -1,23 +1,22 @@
 <?php
 
-declare(strict_types=1); // Activation stricte du typage.
+declare(strict_types=1);
 
 namespace App\Club;
 
 use App\Auth\AuthException;
 
-interface Member // Déclaration d'une interface.
+interface Member
 {
     /**
-     * Méthode pour authentifier le membre.
-     * @throws AuthException Si l'authentification échoue.
+     * @throws AuthException If authentication fails
      */
     public function auth(
         string $login,
         string $password,
     ): void;
 
-    public function getName(): string; // Méthode pour obtenir le nom du membre.
+    public function getName(): string;
 
-    public function __toString(): string; // Méthode pour la représentation sous forme de chaîne.
+    public function __toString(): string;
 }
