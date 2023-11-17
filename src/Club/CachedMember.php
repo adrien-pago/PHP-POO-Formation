@@ -5,38 +5,38 @@ namespace App\Club;
 use App\Auth\AuthException;
 use Throwable;
 
-class CachedMember implements Member // Implémentation de l'interface Member.
+class CachedMember implements Member
 {
-    private bool|null $succeeded = null; // Cache le résultat de l'authentification précédente.
+    private bool|null $succeeded = null;
 
     public function __construct(
-        private readonly Member $member, // Composition: CachedMember "a un" Member.
+        private readonly Member $member,
     ) {
     }
 
     public function auth(string $login, string $password): void
     {
         if (false === $this->succeeded) {
-            throw AuthException::invalidCredentials(); // Lance une exception si l'authentification a déjà échoué.
+            throw AuthException::invalidCredentials();
         } elseif (true === $this->succeeded) {
-            return; // Retourne immédiatement si l'authentification a déjà réussi.
+            return;
         }
 
         try {
-            $this->member->auth($login, $password); // Tente d'authentifier le membre.
-            $this->succeeded = true; // Marque le succès pour les futures tentatives.
+            $this->member->auth($login, $password);
+            $this->succeeded = true;
         } catch (Throwable $e) {
-            $this->succeeded = false; // Marque l'échec pour les futures tentatives.
-            throw $e; // Relance l'exception.
+            $this->succeeded = false;
+            throw $e;
         }
     }
 
-    public function __toString(): string // Méthode magique pour la représentation sous forme de chaîne.
+    public function __toString(): string
     {
         return $this->member->__toString();
     }
 
-    public function getName(): string // Implémentation de la méthode de l'interface.
+    public function getName(): string
     {
         return $this->member->getName();
     }
