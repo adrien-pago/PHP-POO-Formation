@@ -4,20 +4,19 @@ namespace App;
 
 class Unique
 {
-    private static self|null $self = null; // Propriété statique pour stocker l'instance singleton.
+    private static self|null $self = null;
 
-    private function __construct() // Constructeur privé pour empêcher la création d'instances externes.
+    private function __construct()
     {
+
     }
 
-    public static function get(): self // Méthode statique pour accéder à l'instance.
+    public static function get(): self
     {
-        if (self::$self === null) { // Crée l'instance uniquement si elle n'existe pas déjà.
+        if (self::$self === null) {
             self::$self = new self();
         }
 
-        return self::$self; // Retourne l'instance existante.
+        return self::$self;
     }
 }
-
-Unique::get(); // Appel de la méthode pour obtenir l'instance.
