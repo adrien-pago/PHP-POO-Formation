@@ -4,11 +4,11 @@ namespace App\Club;
 
 use App\Level;
 
-class Admin implements Member // Implémentation de l'interface Member.
+class Admin implements Member
 {
     public function __construct(
-        private readonly Member $member, // Composition: Admin "a un" Member.
-        private readonly Level $level = Level::Admin, // Valeur par défaut pour le niveau.
+        private readonly Member $member,
+        private readonly Level $level = Level::Admin,
     ) {
     }
 
@@ -17,18 +17,18 @@ class Admin implements Member // Implémentation de l'interface Member.
         string $password,
     ): void {
         if ($this->level === Level::SuperAdmin) {
-            return; // Traitement spécifique pour les superadmins.
+            return;
         }
 
-        $this->member->auth($login, $password); // Délègue l'authentification au membre interne.
+        $this->member->auth($login, $password);
     }
 
-    public function __toString(): string // Méthode magique pour la représentation sous forme de chaîne.
+    public function __toString(): string
     {
         return (string) $this->member . " as {$this->level->label()}";
     }
 
-    public function getName(): string // Implémentation de la méthode de l'interface.
+    public function getName(): string
     {
         return $this->member->getName();
     }
