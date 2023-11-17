@@ -1,26 +1,24 @@
 <?php
 
-class StepIterator implements IteratorAggregate // Implémentation de l'interface IteratorAggregate.
+class StepIterator implements IteratorAggregate
 {
     public function __construct(
-        private readonly iterable $inner, // Propriétés typées et privées.
+        private readonly iterable $inner,
         private readonly int $step = 1
     ) {
     }
 
-    public function getIterator(): Traversable // Implémentation de la méthode requise par l'interface.
+    public function getIterator(): Traversable
     {
         $index = 0;
         foreach ($this->inner as $key => $item) {
             if (($index % $this->step) === 0) {
-                yield $key => $item; // Utilisation de 'yield' pour créer un générateur.
+                yield $key => $item;
             }
             $index++;
         }
     }
 }
-
-// Utilisation de fonctions anonymes pour créer des générateurs.
 $generatorSimple = static function (): Generator {
     yield 'plop' => 'plop';
     yield 'plop' => 'plap';
@@ -50,6 +48,6 @@ $list = $generatorSimple();
 $stepIterator = new StepIterator($array, 2);
 
 foreach ($stepIterator as $key => $value) {
-    echo "{$key} ==> {$value}" . PHP_EOL; // Parcours avec l'itérateur personnalisé.
+    echo "{$key} ==> {$value}" . PHP_EOL;
 }
 echo PHP_EOL;
