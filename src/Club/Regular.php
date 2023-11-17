@@ -3,39 +3,41 @@
 namespace App\Club;
 
 use App\Auth\AuthException;
+use App\Drinks\Beverage;
 use App\User;
 use SplObjectStorage;
 use WeakReference;
 use function count;
+use const PHP_EOL;
 
-class Regular implements Member // Implémentation de l'interface Member.
+class Regular implements Member
 {
-    private static SplObjectStorage|null $members = null; // Stockage statique des membres.
+    private static SplObjectStorage|null $members = null;
 
-    private WeakReference $self; // Référence faible à l'instance courante.
+    private WeakReference $self;
 
     public function __construct(
-        private readonly User $user, // Composition: Regular "a un" User.
+        private readonly User $user,
         public readonly string $login,
         public readonly string $password,
         public readonly int    $age,
     ) {
-        $this->self = WeakReference::create($this); // Crée une référence faible.
-        self::addMember($this->self); // Ajoute le membre au stockage.
+        $this->self = WeakReference::create($this);
+        self::addMember($this->self);
     }
 
-    private static function addMember(WeakReference $member): void // Ajoute un membre.
+    private static function addMember(WeakReference $member): void
     {
         if (null === self::$members) {
-            self::$members = new SplObjectStorage(); // Initialise le stockage si nécessaire.
+            self::$members = new SplObjectStorage();
         }
 
-        self::$members->attach($member); // Attache le membre au stockage.
+        self::$members->attach($member);
     }
 
-    public function __destruct() // Méthode appelée à la destruction de l'objet.
+    public function __destruct()
     {
-        self::$members->detach($this->self); // Détache le membre du stockage.
+        self::$members->detach($this->self);
     }
 
     public function auth(
@@ -43,28 +45,33 @@ class Regular implements Member // Implémentation de l'interface Member.
         string $password,
     ): void {
         if ($this->login === $login && $this->password === $password) {
-            return; // Authentification réussie.
+            return;
         }
 
-        throw AuthException::invalidCredentials(); // Lance une exception si échec.
+        throw AuthException::invalidCredentials();
     }
 
-    public static function count(): int // Compte le nombre de membres.
+    public static function count(): int
     {
         if (self::$members === null) {
-            return 0; // Retourne 0 si aucun membre.
+            return 0;
         }
 
-        return count(self::$members); // Retourne le nombre de membres.
+        return count(self::$members);
     }
 
-    public function __toString(): string // Représentation sous forme de chaîne.
+    public function __toString(): string
     {
         return "'{$this->getName()}'#{$this->login}";
     }
 
-    public function getName(): string // Obtient le nom de l'utilisateur.
+    public function getName(): string
     {
         return $this->user->name;
+    }
+
+    public function drink(Beverage $beverage): void
+    {
+        echo 'I just drank ' . $beverage->getQuantityInCl() / 100 . 'L of ' . $beverage::class . PHP_EOL;
     }
 }
